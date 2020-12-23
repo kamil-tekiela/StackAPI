@@ -1,0 +1,19 @@
+{
+    "name": "dharman/stackapi",
+    "description": "An API for PHP to connect to Stack Overflow",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7",
+        "php" : "^7.3"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dharman",
+            "email": "tekiela246@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"Dharman\\": "src/"}
+    }
+}
