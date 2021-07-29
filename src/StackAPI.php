@@ -2,6 +2,7 @@
 
 namespace Dharman;
 
+use Exceptions\EmptyResponseException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Psr7\Message;
@@ -44,12 +45,13 @@ class StackAPI {
 			}
 		} catch (RequestException $e) {
 			$response = $e->getResponse();
-			if (isset($response)) {
-				if (($json = json_decode($response->getBody()->getContents())) && isset($json->error_id) && $json->error_id == 502) {
+			if ($response) {
+				$jsonResponse = json_decode((string) $response->getBody());
+				if ($jsonResponse->error_id == 502) {
 					sleep(10 * 60);
 					return $this->request($method, $url, $args);
 				} else {
-					throw new \Exception(Message::toString($e->getResponse()));
+					throw $e;
 				}
 			} else {
 				throw $e;
@@ -59,7 +61,7 @@ class StackAPI {
 		if (isset($rq)) {
 			$body = $rq->getBody()->getContents();
 		} else {
-			throw new \Exception("Response is empty");
+			throw new EmptyResponseException();
 		}
 
 		$contents = json_decode($body);
