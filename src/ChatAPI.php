@@ -71,6 +71,7 @@ class ChatAPI {
 		} catch (RequestException $e) {
 			$ex_contents = $e->getResponse()->getBody()->getContents();
 			$sleepTime = (int) filter_var($ex_contents, FILTER_SANITIZE_NUMBER_INT);
+			$sleepTime = max(1, $sleepTime);
 			sleep($sleepTime);
 			// retry
 			$rq = $this->client->request('POST', 'https://chat.stackoverflow.com/chats/'.$roomId.'/messages/new', [
